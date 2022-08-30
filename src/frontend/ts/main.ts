@@ -82,52 +82,38 @@ class Main implements EventListenerObject, ResponseLister {
     handlerResponseAdd(status: number, response: string) {
         if (status == 200) {
             alert("Agregar nuevo dispositivo")
+            console.log("Se hizo click para agregar");
+            this.framework.ejecutarRequest("INSERT", "http://localhost:8000/new/", this);
         } else {
             alert("Error")
         }
 
     }
 
-    public handlerResponseEliminarDev(e: Event): void {
-        let objetoEvent = <HTMLButtonElement>e.target;
+    handlerResponseEliminarDev(status: number, response: string) {
 
-
-        if (e.type == "click") {
-            console.log(objetoEvent.id);
-            if (objetoEvent.id.match("")) {
-                console.log("Se hizo click para eliminar");
-                this.framework.ejecutarRequest("DELETE", "http://localhost:8000/delete/", this);
-                this.framework.ejecutarRequest("GET", "http://localhost:8000/devices", this);
-
-            } else if (objetoEvent.id.match("btnSaludar")) {
-                alert("Hola " + this.listaPersonas[0].nombre + " ");
-            }
-        }
+        console.log("Se hizo click para eliminar");
+        this.framework.ejecutarRequest("DELETE", "http://localhost:8000/delete/", this);
+        this.framework.ejecutarRequest("GET", "http://localhost:8000/devices", this);
 
     }
 
+
+
+
     public handleEvent(e: Event): void {
         let objetoEvento = <HTMLInputElement>e.target;
-        let objetoEvent = <HTMLButtonElement>e.target;
+
 
         if (e.type == "click") {
-            console.log(objetoEvent.id);
+
             console.log(objetoEvento.id);
             if (objetoEvento.id.startsWith("cb_")) {
-                console.log(objetoEvento.id);
                 console.log("Se hizo click para prender o apagar")
                 let datos = { "id": objetoEvento.id.substring(3), "state": objetoEvento.checked };
                 this.framework.ejecutarRequest("POST", "http://localhost:8000/actualizar", this, datos);
             }
-            
-            if (objetoEvent.id.match("")) {
-                console.log("Se hizo click para eliminar");
-                this.framework.ejecutarRequest("DELETE", "http://localhost:8000/delete/", this);
-                this.framework.ejecutarRequest("GET", "http://localhost:8000/devices", this);
 
-            } else if (objetoEvent.id.match("btnSaludar")) {
-                alert("Hola " + this.listaPersonas[0].nombre + " ");
-            }
         }
         /*  else if (e.type == "click") {
 
@@ -159,12 +145,14 @@ window.addEventListener("load", () => {
     let btn = document.getElementById("btnSaludar");
     let btn2 = document.getElementById("btnDoble");
     let btn3 = document.getElementById("btnAgregar"); //Agrego botón para añadir dispositivo.
+    let btn4 = document.getElementById("btnEliminar"); //Agrego botón para eliminir dispositivo.
     let main: Main = new Main();
     main.nombre = "Andrea"
 
-    btn2.addEventListener("dblclick", main);
     btn.addEventListener("click", main);
+    btn2.addEventListener("dblclick", main);
     btn3.addEventListener("click", main);
+    btn4.addEventListener("click", main);
 
 });
 
