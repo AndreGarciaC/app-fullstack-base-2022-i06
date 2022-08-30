@@ -70,12 +70,22 @@ class Main implements EventListenerObject, ResponseLister {
     }
     handlerResponseActualizar(status: number, response: string) {
         if (status == 200) {
-            alert("Se acutlizo correctamente")    
+            alert("Se actualizó correctamente")    
         } else {
             alert("Error")    
         }
         
     }
+
+    handlerResponseAdd(status: number, response: string) {
+        if (status == 200) {
+            alert("Agregar nuevo dispositivo")    
+        } else {
+            alert("Error")    
+        }
+        
+    }
+
     public handleEvent(e:Event): void {
         let objetoEvento = <HTMLInputElement>e.target;
       
@@ -114,11 +124,13 @@ window.addEventListener("load", () => {
     var instances = M.Modal.init(elems1, "");
     let btn = document.getElementById("btnSaludar");
     let btn2 = document.getElementById("btnDoble");
+    let btn3 = document.getElementById("btnAgregar"); //Agrego botón para añadir dispositivo.
     let main: Main = new Main();
     main.nombre = "Matias"
 
     btn2.addEventListener("dblclick", main);
     btn.addEventListener("click", main);
+    btn3.addEventListener("click", main.handlerResponseAdd(status: number, response: string));
 
 });
 

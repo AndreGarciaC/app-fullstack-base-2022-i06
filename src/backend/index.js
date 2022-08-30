@@ -3,6 +3,7 @@
 var PORT    = 3000;
 
 var express = require('express');
+const connection = require('./mysql-connector');
 var app     = express();
 var utils   = require('./mysql-connector');
 
@@ -27,6 +28,7 @@ var  devices = [
         'type': 2, 
     },
 ];
+
 //=======[ Main module code ]==================================================
 app.post("/actualizar",function(req,res){
     console.log("Llegue al servidor")
@@ -36,21 +38,40 @@ app.post("/actualizar",function(req,res){
         res.send("actualizo");
     }else{
         res.send("ERROR");
-    }
-
+    }   
    
 });
-app.get('/devices/', function(req, res) {
+
+app.post("/new",function(req,res){
+    console.log("Agregue device")
+    console.log(Object.keys(req.body).length)
+    if(req.body.id!=undefined&& req.body.state!=undefined){
+        console.log(req.body);
+        res.send("actualizo");
+    }else{
+        res.send("ERROR");
+    }    
    
-    console.log("Alguien pidio divices!");
-    setTimeout(function(){
+});
+
+app.get('/devices/', function(req, res) {
+    connection.query("SELECT * FROM Devices", function (err, result, fields) {
+        if (err) throw err;
+        console.log(result);
+        res.send(JSON.stringify(result)).status(200);
+      });
+    console.log("Alguien pidió divices!");
+    /* setTimeout(function(){
         res.send(JSON.stringify(devices)).status(200);
-    }, 2000);
+    }, 5000); */
+    
     
 });
 
 app.listen(PORT, function(req, res) {
     console.log("NodeJS API running correctly");
 });
+
+
 
 //=======[ End of file ]=======================================================
