@@ -162,11 +162,12 @@ Completá los pasos para agregar un dispositivo desde el cliente web.
 
 ### Frontend
 
-Completá todos los detalles sobre cómo armaste el frontend, sus interacciones, etc.
+Al cargar la página de manera automática se visualiza los dispositivos agregados a la base de datos.
+En la página de la aplicación se puede agregar y eliminar dispositivos haciendo click en dos botones diferentes e intuitivos.
 
 ### Backend
 
-Completá todos los detalles de funcionamiento sobre el backend, sus interacciones con el cliente web, la base de datos, etc.
+Interactúa con el cliente web y la base de datos a través de la creación de query para: get, post, delete, insert.
 
 <details><summary><b>Ver los endpoints disponibles</b></summary><br>
 

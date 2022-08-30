@@ -5,9 +5,12 @@ class FrameWork{
         xmlHttp.onreadystatechange = () => {
           if (xmlHttp.readyState == 4) {
             if (metodo == "GET") {
-              lister.handlerResponse(xmlHttp.status,xmlHttp.responseText)
-            } else {
-              lister.handlerResponseActualizar(xmlHttp.status,xmlHttp.responseText)
+              lister.handlerResponse(xmlHttp.status,xmlHttp.responseText);
+            } else if (metodo == "DELETE") {
+              lister.handlerResponseEliminarDev;
+            }
+            else {
+              lister.handlerResponseActualizar(xmlHttp.status,xmlHttp.responseText);
             }
             }
     }

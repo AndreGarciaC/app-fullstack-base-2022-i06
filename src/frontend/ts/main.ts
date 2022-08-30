@@ -5,16 +5,19 @@ class Main implements EventListenerObject, ResponseLister {
     public nombre: string;
     public framework: FrameWork = new FrameWork();
     constructor() {
-        
+
         this.framework.ejecutarRequest("GET", "http://localhost:8000/devices", this)
- 
+
+
         this.listaPersonas.push(new Usuario("Juan", 12, "jPerez"));
         this.listaPersonas.push(new Administrador("Pedro", 35));
         this.listaPersonas.push(new Persona("S", 12));
         this.etidadesAcciones.push(new Usuario("Juan", 12, "jPerez"));
         this.etidadesAcciones.push(new Administrador("Juan", 12));
 
-        
+
+
+
     }
 
     public handlerResponse(status: number, response: string) {
@@ -26,16 +29,18 @@ class Main implements EventListenerObject, ResponseLister {
             cajaDiv.setAttribute("class", "talcoa");
             cajaDiv.setAttribute("id", "otro");
             cajaDiv.setAttribute("miAtt", "123");
-            let valor= cajaDiv.getAttribute("miAtt");
-            let datosVisuale:string = `<ul class="collection">`
+            let valor = cajaDiv.getAttribute("miAtt");
+            let datosVisuale: string = `<ul class="collection">`
             for (let disp of resputa) {
                 datosVisuale += ` <li class="collection-item avatar">`;
-                if (disp.type == 1) {
+                if (disp.type == 0) {
                     datosVisuale += `<img src="../static/images/lightbulb.png" alt="" class="circle">`;
-                } else if (disp.type == 2) {
+                } else if (disp.type == 1) {
                     datosVisuale += `<img src="../static/images/window.png" alt="" class="circle">`;
+                } else if (disp.type == 2) {
+                    datosVisuale += `<img src="../static/images/desk-lamp.png" alt="" class="circle">`;
                 }
-                
+
                 datosVisuale += `<span class="title nombreDisp">${disp.name}</span>
                 <p>${disp.description}
                 </p>
@@ -52,73 +57,102 @@ class Main implements EventListenerObject, ResponseLister {
                 </a>
               </li>`
             }
-            datosVisuale += `</ul>`
-          
 
-        
 
             cajaDiv.innerHTML = datosVisuale;
 
             for (let disp of resputa) {
                 let checkbox = document.getElementById("cb_" + disp.id);
-                checkbox.addEventListener("click",this)
+                checkbox.addEventListener("click", this)
             }
-        
-          } else {
-              alert("Algo salio mal")
-          }
+
+        } else {
+            alert("Algo salio mal")
+        }
     }
     handlerResponseActualizar(status: number, response: string) {
         if (status == 200) {
-            alert("Se actualizó correctamente")    
+            alert("Se actualizó correctamente")
         } else {
-            alert("Error")    
+            alert("Error")
         }
-        
+
     }
 
     handlerResponseAdd(status: number, response: string) {
         if (status == 200) {
-            alert("Agregar nuevo dispositivo")    
+            alert("Agregar nuevo dispositivo")
         } else {
-            alert("Error")    
+            alert("Error")
         }
-        
+
     }
 
-    public handleEvent(e:Event): void {
-        let objetoEvento = <HTMLInputElement>e.target;
-      
-        if (e.type == "click" && objetoEvento.id.startsWith("cb_")) {
+    public handlerResponseEliminarDev(e: Event): void {
+        let objetoEvent = <HTMLButtonElement>e.target;
 
-          //  console.log(objetoEvento.id,)
-            console.log("Se hizo click para prender o apagar")
-            let datos = { "id": objetoEvento.id.substring(3), "state": objetoEvento.checked };
-            this.framework.ejecutarRequest("POST","http://localhost:8000/actualizar", this,datos)
+
+        if (e.type == "click") {
+            console.log(objetoEvent.id);
+            if (objetoEvent.id.match("")) {
+                console.log("Se hizo click para eliminar");
+                this.framework.ejecutarRequest("DELETE", "http://localhost:8000/delete/", this);
+                this.framework.ejecutarRequest("GET", "http://localhost:8000/devices", this);
+
+            } else if (objetoEvent.id.match("btnSaludar")) {
+                alert("Hola " + this.listaPersonas[0].nombre + " ");
+            }
+        }
+
+    }
+
+    public handleEvent(e: Event): void {
+        let objetoEvento = <HTMLInputElement>e.target;
+        let objetoEvent = <HTMLButtonElement>e.target;
+
+        if (e.type == "click") {
+            console.log(objetoEvent.id);
+            console.log(objetoEvento.id);
+            if (objetoEvento.id.startsWith("cb_")) {
+                console.log(objetoEvento.id);
+                console.log("Se hizo click para prender o apagar")
+                let datos = { "id": objetoEvento.id.substring(3), "state": objetoEvento.checked };
+                this.framework.ejecutarRequest("POST", "http://localhost:8000/actualizar", this, datos);
+            }
             
-        }else if (e.type == "click") {
-      
-            
-            alert("Hola " +  this.listaPersonas[0].nombre +" ");    
-        } else {
-            
+            if (objetoEvent.id.match("")) {
+                console.log("Se hizo click para eliminar");
+                this.framework.ejecutarRequest("DELETE", "http://localhost:8000/delete/", this);
+                this.framework.ejecutarRequest("GET", "http://localhost:8000/devices", this);
+
+            } else if (objetoEvent.id.match("btnSaludar")) {
+                alert("Hola " + this.listaPersonas[0].nombre + " ");
+            }
+        }
+        /*  else if (e.type == "click") {
+
+             alert("Hola " + this.listaPersonas[0].nombre + " ");
+
+         }
+        else {
+
             let elemento = <HTMLInputElement>this.framework.recuperarElemento("input1");
-            if (elemento.value.length>5) {
-                
-                
-                M.toast({html: 'se cargo la info'})
+            if (elemento.value.length > 5) {
+
+
+                M.toast({ html: 'se cargo la info' })
             } else {
-                alert("falta cargar el nombre o es menor a 5");    
+                alert("falta cargar el nombre o es menor a 5");
             }
 
-            
-        }
+
+        } */
     }
 }
 
 window.addEventListener("load", () => {
     var elems = document.querySelectorAll('select');
-    var instances = M.FormSelect.init(elems,"");
+    var instances = M.FormSelect.init(elems, "");
     M.updateTextFields();
     var elems1 = document.querySelectorAll('.modal');
     var instances = M.Modal.init(elems1, "");
@@ -126,11 +160,11 @@ window.addEventListener("load", () => {
     let btn2 = document.getElementById("btnDoble");
     let btn3 = document.getElementById("btnAgregar"); //Agrego botón para añadir dispositivo.
     let main: Main = new Main();
-    main.nombre = "Matias"
+    main.nombre = "Andrea"
 
     btn2.addEventListener("dblclick", main);
     btn.addEventListener("click", main);
-    btn3.addEventListener("click", main.handlerResponseAdd(status: number, response: string));
+    btn3.addEventListener("click", main);
 
 });
 

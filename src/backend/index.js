@@ -54,6 +54,15 @@ app.post("/new",function(req,res){
    
 });
 
+app.get('/delete/',function(req,res){
+    connection.query("DELETE FROM Devices WHERE name = 'Persiana 1'", function (err, result) {
+        if (err) throw err;
+        console.log(result);
+      });
+      console.log("Elimino device");
+   
+});
+
 app.get('/devices/', function(req, res) {
     connection.query("SELECT * FROM Devices", function (err, result, fields) {
         if (err) throw err;
